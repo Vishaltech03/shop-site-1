@@ -1,43 +1,57 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow">
-<title>Admin — Products Manage Karein</title>
+<title>Admin — A-ONE THRIFT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
   .admin-wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 100px; }
   .admin-head { margin-bottom: 30px; }
-  .admin-head h1 { font-size: 1.8rem; margin-bottom: 8px; }
-  .admin-head p { color: #5a5349; margin: 0; }
+  .admin-head h1 { font-size: 1.6rem; margin-bottom: 8px; }
+  .admin-head p { color: #5c5546; margin: 0; }
   .admin-card {
     background: var(--card);
-    border: 1px solid var(--line);
+    border: 2px solid var(--ink);
     border-radius: 14px;
     padding: 24px;
     margin-bottom: 28px;
   }
-  .admin-card h2 { font-size: 1.15rem; margin-bottom: 18px; }
+  .admin-card h2 { font-family: var(--sans); font-size: 1.05rem; font-weight: 700; margin-bottom: 18px; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .form-grid .full { grid-column: 1 / -1; }
-  label { display: block; font-size: 0.85rem; margin-bottom: 6px; color: #46403a; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #3a3527; }
   input, textarea {
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line);
     border-radius: 8px;
     font-family: var(--sans);
     font-size: 0.95rem;
-    background: var(--bg);
+    background: var(--paper);
   }
+  input:focus, textarea:focus { outline: none; border-color: var(--ink); }
   textarea { resize: vertical; min-height: 50px; }
+  .field-hint { font-size: 0.78rem; color: #8a836e; margin: 5px 0 0; }
+  .field-hint a { color: var(--pop-dark); font-weight: 600; }
+  .image-preview {
+    margin-top: 8px;
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    border: 1.5px solid var(--line);
+    display: none;
+  }
   .form-actions { margin-top: 16px; display: flex; gap: 10px; }
-  .btn-save { background: var(--indigo); color: #fff; }
-  .btn-cancel { background: transparent; border: 1px solid var(--ink); }
+  .btn-save { background: var(--pop); color: #fff; }
+  .btn-save:hover { background: var(--pop-dark); }
+  .btn-cancel { background: transparent; border: 2px solid var(--ink); }
   .product-row-admin {
     display: flex;
     align-items: center;
@@ -46,23 +60,23 @@
     border-bottom: 1px solid var(--line);
   }
   .product-row-admin:last-child { border-bottom: none; }
-  .thumb { width: 54px; height: 54px; border-radius: 8px; background-size: cover; background-position: center; flex-shrink: 0; }
+  .thumb { width: 54px; height: 54px; border-radius: 8px; background-size: cover; background-position: center; flex-shrink: 0; border: 1.5px solid var(--line); }
   .row-info { flex: 1; min-width: 0; }
   .row-info p { margin: 0; }
-  .row-name { font-weight: 500; }
-  .row-price { color: #5a5349; font-size: 0.88rem; }
+  .row-name { font-weight: 600; }
+  .row-price { color: #5c5546; font-size: 0.88rem; }
   .row-actions { display: flex; gap: 8px; flex-shrink: 0; }
   .row-actions button {
-    background: none; border: 1px solid var(--line); border-radius: 8px;
-    padding: 6px 12px; font-size: 0.82rem; cursor: pointer; font-family: var(--sans);
+    background: none; border: 1.5px solid var(--line); border-radius: 8px;
+    padding: 6px 12px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: var(--sans);
   }
-  .row-actions .edit-btn:hover { border-color: var(--indigo); color: var(--indigo); }
-  .row-actions .delete-btn:hover { border-color: var(--rust); color: var(--rust); }
+  .row-actions .edit-btn:hover { border-color: var(--ink); }
+  .row-actions .delete-btn:hover { border-color: var(--pop); color: var(--pop); }
   .download-bar {
     position: sticky;
     bottom: 0;
-    background: var(--bg);
-    border-top: 1px solid var(--line);
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
     padding: 16px 0;
     display: flex;
     justify-content: space-between;
@@ -70,13 +84,14 @@
     gap: 16px;
     flex-wrap: wrap;
   }
-  .download-bar p { margin: 0; font-size: 0.85rem; color: #5a5349; max-width: 40ch; }
+  .download-bar p { margin: 0; font-size: 0.85rem; color: #5c5546; max-width: 40ch; }
   .lock-screen {
     max-width: 360px;
     margin: 100px auto;
     text-align: center;
     padding: 0 24px;
   }
+  .lock-screen h1 { font-size: 1.4rem; }
   .lock-screen input { margin: 16px 0; }
   #adminApp { display: none; }
 </style>
@@ -84,61 +99,74 @@
 <body>
 
 <div class="lock-screen" id="lockScreen">
-  <h1 style="font-family: var(--serif); font-size: 1.6rem;">Admin Panel</h1>
-  <p style="color:#5a5349;">Yeh page sirf aapke liye hai. Password daalein.</p>
+  <h1>Admin Panel</h1>
+  <p style="color:#5c5546;">This page is for store owners only. Enter password.</p>
   <input type="password" id="passwordInput" placeholder="Password" />
-  <button class="btn btn-primary" id="unlockBtn" style="width:100%;">Andar jayein</button>
-  <p id="lockError" style="color: var(--rust); font-size: 0.85rem; display:none;">Galat password.</p>
+  <button class="btn btn-primary" id="unlockBtn" style="width:100%;">Enter</button>
+  <p id="lockError" style="color: var(--pop); font-size: 0.85rem; display:none;">Wrong password.</p>
 </div>
 
 <div id="adminApp">
   <header class="site-header">
     <div class="wrap header-row">
-      <a href="index.html" class="brand">Basera — Admin</a>
-      <a href="index.html" style="font-size:0.9rem; color: var(--indigo);">← Site par wapas jayein</a>
+      <a href="index.html" class="brand">A-ONE<span>ADMIN</span></a>
+      <a href="index.html" style="font-size:0.9rem; font-weight:600; color: var(--pop-dark);">← Back to store</a>
     </div>
   </header>
 
   <div class="admin-wrap">
     <div class="admin-head">
-      <h1>Products manage karein</h1>
-      <p>Yahan add/edit/delete karke, neeche "Download products.js" dabayein aur us file ko GitHub par purani <code>products.js</code> ki jagah upload kar dein.</p>
+      <h1>Manage products</h1>
+      <p>Add, edit, or remove items below. When you're done, hit "Download products.js" and upload that file to GitHub to replace the old one.</p>
     </div>
 
     <div class="admin-card">
-      <h2 id="formTitle">Naya product add karein</h2>
+      <h2 id="formTitle">Add a new product</h2>
       <div class="form-grid">
         <div>
-          <label>Naam</label>
-          <input type="text" id="fName" placeholder="Jaise: Handloom Cotton Kurta" />
+          <label>Name</label>
+          <input type="text" id="fName" placeholder="e.g. Vintage Levi's Jacket" />
         </div>
         <div>
           <label>Price (₹)</label>
           <input type="number" id="fPrice" placeholder="899" />
         </div>
         <div class="full">
-          <label>Image URL</label>
-          <input type="text" id="fImage" placeholder="https://..." />
+          <label>Image URL or Google Drive link</label>
+          <input type="text" id="fImage" placeholder="https://... or a Google Drive share link" />
+          <p class="field-hint">Google Drive links are supported — see instructions below. <a href="#driveHelp">How to share a Drive image ↓</a></p>
+          <div class="image-preview" id="imagePreview"></div>
         </div>
         <div class="full">
           <label>Description</label>
-          <textarea id="fDesc" placeholder="Ek chhoti si line"></textarea>
+          <textarea id="fDesc" placeholder="One short line about the piece"></textarea>
         </div>
       </div>
       <div class="form-actions">
-        <button class="btn btn-save" id="saveBtn">Product save karein</button>
+        <button class="btn btn-save" id="saveBtn">Save product</button>
         <button class="btn btn-cancel" id="cancelBtn" style="display:none;">Cancel</button>
       </div>
     </div>
 
     <div class="admin-card">
-      <h2>Abhi ke products (<span id="productCountLabel">0</span>)</h2>
+      <h2>Current products (<span id="productCountLabel">0</span>)</h2>
       <div id="productListAdmin"></div>
+    </div>
+
+    <div class="admin-card" id="driveHelp">
+      <h2>Using Google Drive for images</h2>
+      <ol style="margin:0; padding-left: 20px; color:#3a3527; font-size:0.92rem; line-height:1.7;">
+        <li>Upload your photo to Google Drive.</li>
+        <li>Right-click the file → <strong>Share</strong> → change access to <strong>"Anyone with the link"</strong> (must be a Viewer).</li>
+        <li>Click <strong>Copy link</strong> — it'll look like <code>https://drive.google.com/file/d/FILE_ID/view?usp=sharing</code>.</li>
+        <li>Paste that whole link into the Image field above — it's converted automatically when you save.</li>
+      </ol>
+      <p class="field-hint" style="margin-top:12px;">Note: if an image doesn't load after publishing, double-check the sharing setting is "Anyone with the link" — private files never show up on the site.</p>
     </div>
   </div>
 
   <div class="wrap download-bar">
-    <p>Changes sirf is browser mein save hote hain jab tak aap file download karke GitHub par upload nahi karte.</p>
+    <p>Changes here are only saved in this browser until you download the file and upload it to GitHub.</p>
     <button class="btn btn-primary" id="downloadBtn">Download products.js</button>
   </div>
 </div>

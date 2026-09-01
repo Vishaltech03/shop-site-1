@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Basera — Handpicked Goods</title>
+<title>A-ONE THRIFT — Secondhand, First Pick</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="site-header">
     <div class="wrap header-row">
-      <a href="#" class="brand">Basera</a>
+      <a href="#" class="brand">A-ONE<span>THRIFT</span></a>
       <nav class="nav-links">
         <a href="#shop">Shop</a>
-        <a href="#about">About</a>
+        <a href="#about">How it works</a>
       </nav>
-      <button class="cart-toggle" id="cartToggle" aria-label="Cart kholein">
-        Cart <span class="cart-count" id="cartCount">0</span>
+      <button class="cart-toggle" id="cartToggle" aria-label="Open cart">
+        Bag <span class="cart-count" id="cartCount">0</span>
       </button>
     </div>
   </header>
@@ -27,15 +27,19 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="hero-kicker">Roz ke istemaal ki cheezein, dhyaan se chuni gayi</p>
-        <h1>Ghar ke liye, thoda sa aaram, thoda sa sukoon.</h1>
-        <p class="hero-sub">Har cheez seedha maker se, bina beech ke kisi ke. Order karein, hum WhatsApp par baat karke poori karenge.</p>
-        <a href="#shop" class="btn btn-primary">Collection dekhein</a>
+        <p class="hero-kicker">Rewear the good stuff</p>
+        <h1>Secondhand style, first-pick prices.</h1>
+        <p class="hero-sub">Every piece is one of one — thrifted, checked, and dropped here before it's gone for good. No two hauls ever look the same.</p>
+        <a href="#shop" class="btn btn-primary">See the drop</a>
       </div>
       <div class="hero-art" aria-hidden="true">
+        <div class="tag-sticker">
+          <span class="tag-line">SIZE: VARIES</span>
+          <span class="tag-line tag-price">₹300–₹1500</span>
+          <span class="tag-line">ONE OF ONE</span>
+        </div>
         <div class="hero-block block-a"></div>
         <div class="hero-block block-b"></div>
-        <div class="hero-block block-c"></div>
       </div>
     </div>
   </section>
@@ -44,22 +48,24 @@
     <section class="shop-section" id="shop">
       <div class="wrap">
         <div class="section-head">
-          <h2>Poori collection</h2>
-          <p>Stock seemit hai — jo pasand aaye, abhi book kar lein.</p>
+          <h2>This week's drop</h2>
+          <p>Once it's gone, it's gone — nothing gets restocked twice.</p>
         </div>
-        <div class="product-grid" id="productGrid"><!-- JS se bharega --></div>
+        <div class="product-grid" id="productGrid"><!-- filled by JS --></div>
       </div>
     </section>
 
     <section class="about-section" id="about">
       <div class="wrap about-grid">
-        <div class="about-image" aria-hidden="true"></div>
+        <div class="about-image" aria-hidden="true">
+          <span class="about-badge">DM to<br>confirm</span>
+        </div>
         <div class="about-copy">
-          <h2>Kaise kaam karta hai</h2>
+          <h2>How buying works</h2>
           <ol class="steps">
-            <li><strong>Chunein.</strong> Jo cheez pasand aaye, "Cart mein daalein" dabayein.</li>
-            <li><strong>Bhejein.</strong> "WhatsApp par order karein" dabayein — poori list message ban jayegi.</li>
-            <li><strong>Confirm karein.</strong> Hum WhatsApp par payment aur delivery tay kar lenge.</li>
+            <li><strong>Pick your piece.</strong> Tap "Add to bag" on anything you want.</li>
+            <li><strong>Send it over.</strong> Hit "Checkout on WhatsApp" — your whole order writes itself into a message.</li>
+            <li><strong>Lock it in.</strong> We confirm sizing, payment, and shipping straight in the chat.</li>
           </ol>
         </div>
       </div>
@@ -68,26 +74,26 @@
 
   <footer class="site-footer">
     <div class="wrap footer-row">
-      <p>&copy; 2026 Basera. Order seedhe WhatsApp par confirm hote hain.</p>
-      <a href="#" id="footerWhatsapp">WhatsApp par baat karein</a>
+      <p>&copy; 2026 A-ONE THRIFT. Every order is confirmed over WhatsApp.</p>
+      <a href="#" id="footerWhatsapp">Message us</a>
     </div>
   </footer>
 
   <!-- Cart drawer -->
   <div class="cart-overlay" id="cartOverlay"></div>
-  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag">
     <div class="cart-drawer-head">
-      <h2>Aapka Cart</h2>
-      <button class="cart-close" id="cartClose" aria-label="Cart band karein">&times;</button>
+      <h2>Your Bag</h2>
+      <button class="cart-close" id="cartClose" aria-label="Close bag">&times;</button>
     </div>
-    <div class="cart-items" id="cartItems"><!-- JS se bharega --></div>
+    <div class="cart-items" id="cartItems"><!-- filled by JS --></div>
     <div class="cart-footer">
       <div class="cart-total-row">
         <span>Total</span>
         <span id="cartTotal">₹0</span>
       </div>
-      <button class="btn btn-whatsapp" id="checkoutBtn">WhatsApp par order karein</button>
-      <p class="cart-note">Payment yahan nahi hoti — order WhatsApp par confirm hota hai.</p>
+      <button class="btn btn-whatsapp" id="checkoutBtn">Checkout on WhatsApp</button>
+      <p class="cart-note">No payment happens here — every order is confirmed on WhatsApp.</p>
     </div>
   </aside>
 

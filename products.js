@@ -1,48 +1,49 @@
 // ============================================================
-// PRODUCTS — apne products yahan add/edit/remove karein
-// Har product ke liye: id (unique), name, price (number), image (URL), desc
+// PRODUCTS — add, edit, or remove your items here
+// Each product needs: id (unique), name, price (number), image (URL), desc
+// Tip: use the Admin Panel (admin.html) instead of editing this by hand
 // ============================================================
 const PRODUCTS = [
   {
     id: "p1",
-    name: "Handloom Cotton Kurta",
-    price: 899,
-    image: "https://picsum.photos/seed/kurta1/500/500",
-    desc: "Halka, saans lene laayak fabric — roz pehnne ke liye."
+    name: "Vintage Levi's Trucker Jacket",
+    price: 1299,
+    image: "https://picsum.photos/seed/jacket1/500/500",
+    desc: "Faded blue denim, broken in just right. Fits true to size M."
   },
   {
     id: "p2",
-    name: "Clay Diffuser Set",
-    price: 649,
-    image: "https://picsum.photos/seed/diffuser2/500/500",
-    desc: "Haath se bana terracotta diffuser, sandalwood oil ke saath."
+    name: "Y2K Baggy Cargo Pants",
+    price: 799,
+    image: "https://picsum.photos/seed/cargo2/500/500",
+    desc: "Six pockets, wide leg, zero regrets. Size 32."
   },
   {
     id: "p3",
-    name: "Woven Jute Tote",
+    name: "90s Band Tee — Faded Black",
     price: 449,
-    image: "https://picsum.photos/seed/tote3/500/500",
-    desc: "Rozana istemaal ke liye majboot aur stylish bag."
+    image: "https://picsum.photos/seed/tee3/500/500",
+    desc: "Soft, thin, one-of-one print. Fits oversized on most."
   },
   {
     id: "p4",
-    name: "Brass Table Diya (Set of 2)",
-    price: 799,
-    image: "https://picsum.photos/seed/diya4/500/500",
-    desc: "Ghar ke liye ek shant, garam roshni."
+    name: "Retro Windbreaker",
+    price: 899,
+    image: "https://picsum.photos/seed/wind4/500/500",
+    desc: "Color-blocked, packable hood, main character energy."
   },
   {
     id: "p5",
-    name: "Linen Cushion Cover",
-    price: 349,
-    image: "https://picsum.photos/seed/cushion5/500/500",
-    desc: "Naturally dyed linen, sofa ya bed ke liye."
+    name: "Chunky Knit Sweater",
+    price: 649,
+    image: "https://picsum.photos/seed/knit5/500/500",
+    desc: "Oversized fit, cream and rust stripes. Cozy season starter."
   },
   {
     id: "p6",
-    name: "Stoneware Chai Cups (Set of 4)",
+    name: "Wide-Leg Vintage Denim",
     price: 999,
-    image: "https://picsum.photos/seed/cups6/500/500",
-    desc: "Har cup thoda alag — haath se glaze kiya gaya."
+    image: "https://picsum.photos/seed/denim6/500/500",
+    desc: "High-rise, stonewash, stitched by someone who cared. Size 30."
   }
 ];

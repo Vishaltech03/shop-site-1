@@ -1,18 +1,31 @@
 // ============================================================
-// Admin password — sirf casual protection, real security nahi hai
-// (kyunki yeh static site hai, koi bhi page ka code dekh sakta hai)
+// Admin password — this is casual protection only, not real security
+// (this is a static site, so the code is technically viewable by anyone)
 // ============================================================
-const ADMIN_PASSWORD = "basera123";
+const ADMIN_PASSWORD = "aone2026";
 
-const DRAFT_KEY = "basera_admin_draft_products_v1";
+const DRAFT_KEY = "aone_admin_draft_products_v1";
 let editingId = null;
+
+// Converts a Google Drive share link into a direct-viewable image URL.
+// Accepts links like https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+function resolveImageUrl(url) {
+  if (!url) return url;
+  const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
+    || url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/)
+    || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match && url.includes("drive.google.com")) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
 
 function loadDraftProducts() {
   const saved = localStorage.getItem(DRAFT_KEY);
   if (saved) {
     try { return JSON.parse(saved); } catch { /* fall through */ }
   }
-  // pehli baar: products.js se shuru karein
+  // first time: start from products.js
   return JSON.parse(JSON.stringify(PRODUCTS));
 }
 
@@ -27,13 +40,13 @@ function renderAdminList() {
   document.getElementById("productCountLabel").textContent = draftProducts.length;
 
   if (draftProducts.length === 0) {
-    container.innerHTML = `<p style="color:#5a5349;">Koi product nahi hai. Upar se add karein.</p>`;
+    container.innerHTML = `<p style="color:#5c5546;">No products yet. Add one above.</p>`;
     return;
   }
 
   container.innerHTML = draftProducts.map(p => `
     <div class="product-row-admin">
-      <div class="thumb" style="background-image:url('${p.image}')"></div>
+      <div class="thumb" style="background-image:url('${resolveImageUrl(p.image)}')"></div>
       <div class="row-info">
         <p class="row-name">${p.name}</p>
         <p class="row-price">₹${p.price}</p>
@@ -58,8 +71,9 @@ function clearForm() {
   document.getElementById("fPrice").value = "";
   document.getElementById("fImage").value = "";
   document.getElementById("fDesc").value = "";
-  document.getElementById("formTitle").textContent = "Naya product add karein";
+  document.getElementById("formTitle").textContent = "Add a new product";
   document.getElementById("cancelBtn").style.display = "none";
+  document.getElementById("imagePreview").style.display = "none";
   editingId = null;
 }
 
@@ -70,14 +84,15 @@ function startEdit(id) {
   document.getElementById("fPrice").value = p.price;
   document.getElementById("fImage").value = p.image;
   document.getElementById("fDesc").value = p.desc;
-  document.getElementById("formTitle").textContent = "Product edit karein";
+  document.getElementById("formTitle").textContent = "Edit product";
   document.getElementById("cancelBtn").style.display = "inline-block";
+  updateImagePreview(p.image);
   editingId = id;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function deleteProduct(id) {
-  if (!confirm("Yeh product delete karna hai?")) return;
+  if (!confirm("Delete this product?")) return;
   draftProducts = draftProducts.filter(p => p.id !== id);
   saveDraftProducts(draftProducts);
   renderAdminList();
@@ -89,14 +104,26 @@ function nextId() {
   return `p${n}`;
 }
 
+function updateImagePreview(rawUrl) {
+  const preview = document.getElementById("imagePreview");
+  const resolved = resolveImageUrl(rawUrl);
+  if (resolved) {
+    preview.style.backgroundImage = `url('${resolved}')`;
+    preview.style.display = "block";
+  } else {
+    preview.style.display = "none";
+  }
+}
+
 function saveProduct() {
   const name = document.getElementById("fName").value.trim();
   const price = parseFloat(document.getElementById("fPrice").value);
-  const image = document.getElementById("fImage").value.trim();
+  const rawImage = document.getElementById("fImage").value.trim();
+  const image = resolveImageUrl(rawImage);
   const desc = document.getElementById("fDesc").value.trim();
 
   if (!name || !price || !image) {
-    alert("Naam, price aur image URL zaroori hai.");
+    alert("Name, price, and image are required.");
     return;
   }
 
@@ -114,8 +141,9 @@ function saveProduct() {
 
 function downloadProductsFile() {
   const header = `// ============================================================
-// PRODUCTS — apne products yahan add/edit/remove karein
-// Har product ke liye: id (unique), name, price (number), image (URL), desc
+// PRODUCTS — add, edit, or remove your items here
+// Each product needs: id (unique), name, price (number), image (URL), desc
+// Tip: use the Admin Panel (admin.html) instead of editing this by hand
 // ============================================================
 const PRODUCTS = `;
   const body = JSON.stringify(draftProducts, null, 2) + ";\n";
@@ -156,4 +184,5 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("saveBtn").addEventListener("click", saveProduct);
   document.getElementById("cancelBtn").addEventListener("click", clearForm);
   document.getElementById("downloadBtn").addEventListener("click", downloadProductsFile);
+  document.getElementById("fImage").addEventListener("input", e => updateImagePreview(e.target.value));
 });

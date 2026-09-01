@@ -1,14 +1,27 @@
 // ============================================================
-// SETTINGS — yeh do cheezein sabse pehle apni details se badlein
+// SETTINGS — update these two things first
 // ============================================================
-const WHATSAPP_NUMBER = "911234567890"; // Country code ke saath, bina + ya spaces ke. Jaise India: 91XXXXXXXXXX
-const SHOP_NAME = "Basera";
+const WHATSAPP_NUMBER = "911234567890"; // Include country code, no + or spaces. e.g. India: 91XXXXXXXXXX
+const SHOP_NAME = "A-ONE THRIFT";
 const CURRENCY_SYMBOL = "₹";
 
 // ============================================================
-// Neeche kuch badalne ki zaroorat nahi hai
+// Nothing below this needs to change
 // ============================================================
-const CART_KEY = "basera_cart_v1";
+const CART_KEY = "aone_thrift_cart_v1";
+
+// Converts a Google Drive share link into a direct-viewable image URL.
+// Works with links like https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+function resolveImageUrl(url) {
+  if (!url) return url;
+  const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
+    || url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/)
+    || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match && url.includes("drive.google.com")) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
 
 function getCart() {
   try {
@@ -59,15 +72,17 @@ function cartTotal(cart) {
 
 function renderProducts() {
   const grid = document.getElementById("productGrid");
-  grid.innerHTML = PRODUCTS.map(p => `
-    <article class="product-card">
-      <div class="product-image" style="background-image:url('${p.image}')"></div>
+  grid.innerHTML = PRODUCTS.map((p, i) => `
+    <article class="product-card" style="--tilt:${(i % 2 === 0 ? -1 : 1) * 1.5}deg">
+      <div class="product-image" style="background-image:url('${resolveImageUrl(p.image)}')">
+        <span class="product-badge">ONE OF ONE</span>
+      </div>
       <div class="product-info">
         <h3>${p.name}</h3>
         <p class="product-desc">${p.desc}</p>
         <div class="product-row">
           <span class="product-price">${CURRENCY_SYMBOL}${p.price}</span>
-          <button class="btn btn-add" data-id="${p.id}">Cart mein daalein</button>
+          <button class="btn btn-add" data-id="${p.id}">Add to bag</button>
         </div>
       </div>
     </article>
@@ -87,14 +102,14 @@ function renderCart() {
   const entries = Object.entries(cart);
 
   if (entries.length === 0) {
-    itemsEl.innerHTML = `<p class="cart-empty">Cart abhi khaali hai.</p>`;
+    itemsEl.innerHTML = `<p class="cart-empty">Your bag is empty.</p>`;
   } else {
     itemsEl.innerHTML = entries.map(([id, qty]) => {
       const p = PRODUCTS.find(prod => prod.id === id);
       if (!p) return "";
       return `
         <div class="cart-item">
-          <div class="cart-item-image" style="background-image:url('${p.image}')"></div>
+          <div class="cart-item-image" style="background-image:url('${resolveImageUrl(p.image)}')"></div>
           <div class="cart-item-info">
             <p class="cart-item-name">${p.name}</p>
             <p class="cart-item-price">${CURRENCY_SYMBOL}${p.price}</p>
@@ -102,7 +117,7 @@ function renderCart() {
               <button class="qty-btn" data-action="dec" data-id="${id}">&minus;</button>
               <span>${qty}</span>
               <button class="qty-btn" data-action="inc" data-id="${id}">+</button>
-              <button class="remove-btn" data-id="${id}">Hatayein</button>
+              <button class="remove-btn" data-id="${id}">Remove</button>
             </div>
           </div>
         </div>
@@ -138,7 +153,7 @@ function buildWhatsappMessage() {
   const entries = Object.entries(cart);
   if (entries.length === 0) return null;
 
-  let lines = [`Namaste ${SHOP_NAME}, mujhe yeh order karna hai:`, ""];
+  let lines = [`Hey ${SHOP_NAME}, I'd like to order:`, ""];
   entries.forEach(([id, qty]) => {
     const p = PRODUCTS.find(prod => prod.id === id);
     if (p) lines.push(`• ${p.name} x${qty} — ${CURRENCY_SYMBOL}${p.price * qty}`);
@@ -146,7 +161,7 @@ function buildWhatsappMessage() {
   lines.push("");
   lines.push(`Total: ${CURRENCY_SYMBOL}${cartTotal(cart)}`);
   lines.push("");
-  lines.push("Kripya delivery aur payment ki jaankari batayein.");
+  lines.push("Please share sizing, payment, and shipping details.");
 
   return lines.join("\n");
 }
@@ -154,7 +169,7 @@ function buildWhatsappMessage() {
 function goToWhatsapp() {
   const message = buildWhatsappMessage();
   if (!message) {
-    alert("Cart khaali hai — pehle kuch products chunein.");
+    alert("Your bag is empty — add something first.");
     return;
   }
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
