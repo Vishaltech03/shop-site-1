@@ -1,7 +1,7 @@
 // ============================================================
 // SETTINGS — update these two things first
 // ============================================================
-const WHATSAPP_NUMBER = "911234567890"; // Include country code, no + or spaces. e.g. India: 91XXXXXXXXXX
+const WHATSAPP_NUMBER = "8287455534"; // Include country code, no + or spaces. e.g. India: 91XXXXXXXXXX
 const SHOP_NAME = "A-ONE THRIFT";
 const CURRENCY_SYMBOL = "₹";
 
