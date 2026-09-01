@@ -1,7 +1,7 @@
 // ============================================================
 // SETTINGS — update these two things first
 // ============================================================
-const WHATSAPP_NUMBER = "8287455534"; // Include country code, no + or spaces. e.g. India: 91XXXXXXXXXX
+const WHATSAPP_NUMBER = "8282455534"; // Include country code, no + or spaces. e.g. India: 91XXXXXXXXXX
 const SHOP_NAME = "A-ONE THRIFT";
 const CURRENCY_SYMBOL = "₹";
 
@@ -22,6 +22,9 @@ function resolveImageUrl(url) {
   }
   return url;
 }
+
+let activeCategory = "All";
+let searchQuery = "";
 
 function getCart() {
   try {
@@ -70,9 +73,46 @@ function cartTotal(cart) {
   }, 0);
 }
 
+function getCategories() {
+  const cats = [...new Set(PRODUCTS.map(p => p.category).filter(Boolean))];
+  return ["All", ...cats];
+}
+
+function renderCategoryRow() {
+  const row = document.getElementById("categoryRow");
+  const categories = getCategories();
+  row.innerHTML = `<div class="category-scroll">${categories.map(cat => `
+    <button class="category-pill ${cat === activeCategory ? "active" : ""}" data-cat="${cat}">${cat}</button>
+  `).join("")}</div>`;
+
+  row.querySelectorAll(".category-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeCategory = btn.dataset.cat;
+      renderCategoryRow();
+      renderProducts();
+    });
+  });
+}
+
+function getFilteredProducts() {
+  const q = searchQuery.trim().toLowerCase();
+  return PRODUCTS.filter(p => {
+    const matchesCategory = activeCategory === "All" || p.category === activeCategory;
+    const matchesSearch = !q || p.name.toLowerCase().includes(q) || (p.desc || "").toLowerCase().includes(q);
+    return matchesCategory && matchesSearch;
+  });
+}
+
 function renderProducts() {
   const grid = document.getElementById("productGrid");
-  grid.innerHTML = PRODUCTS.map((p, i) => `
+  const filtered = getFilteredProducts();
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<p class="no-results">No pieces match that search — try a different keyword or category.</p>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
     <article class="product-card" style="--tilt:${(i % 2 === 0 ? -1 : 1) * 1.5}deg">
       <div class="product-image" style="background-image:url('${resolveImageUrl(p.image)}')">
         <span class="product-badge">ONE OF ONE</span>
@@ -136,6 +176,20 @@ function renderCart() {
 
   totalEl.textContent = `${CURRENCY_SYMBOL}${cartTotal(cart)}`;
   countEl.textContent = cartCount(cart);
+
+  updateStickyBagBar(cart);
+}
+
+function updateStickyBagBar(cart) {
+  const bar = document.getElementById("stickyBagBar");
+  const count = cartCount(cart);
+  if (count > 0) {
+    document.getElementById("stickyBagCount").textContent = `${count} item${count > 1 ? "s" : ""}`;
+    document.getElementById("stickyBagTotal").textContent = `${CURRENCY_SYMBOL}${cartTotal(cart)}`;
+    bar.classList.add("visible");
+  } else {
+    bar.classList.remove("visible");
+  }
 }
 
 function openCart() {
@@ -177,6 +231,7 @@ function goToWhatsapp() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  renderCategoryRow();
   renderProducts();
   renderCart();
 
@@ -184,6 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("cartClose").addEventListener("click", closeCart);
   document.getElementById("cartOverlay").addEventListener("click", closeCart);
   document.getElementById("checkoutBtn").addEventListener("click", goToWhatsapp);
+  document.getElementById("stickyBagBtn").addEventListener("click", openCart);
+
+  document.getElementById("searchInput").addEventListener("input", e => {
+    searchQuery = e.target.value;
+    renderProducts();
+  });
 
   const footerLink = document.getElementById("footerWhatsapp");
   footerLink.href = `https://wa.me/${WHATSAPP_NUMBER}`;

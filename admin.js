@@ -49,7 +49,7 @@ function renderAdminList() {
       <div class="thumb" style="background-image:url('${resolveImageUrl(p.image)}')"></div>
       <div class="row-info">
         <p class="row-name">${p.name}</p>
-        <p class="row-price">₹${p.price}</p>
+        <p class="row-price">₹${p.price} · ${p.category || "Uncategorized"}</p>
       </div>
       <div class="row-actions">
         <button class="edit-btn" data-id="${p.id}">Edit</button>
@@ -69,6 +69,7 @@ function renderAdminList() {
 function clearForm() {
   document.getElementById("fName").value = "";
   document.getElementById("fPrice").value = "";
+  document.getElementById("fCategory").value = "";
   document.getElementById("fImage").value = "";
   document.getElementById("fDesc").value = "";
   document.getElementById("formTitle").textContent = "Add a new product";
@@ -82,6 +83,7 @@ function startEdit(id) {
   if (!p) return;
   document.getElementById("fName").value = p.name;
   document.getElementById("fPrice").value = p.price;
+  document.getElementById("fCategory").value = p.category || "";
   document.getElementById("fImage").value = p.image;
   document.getElementById("fDesc").value = p.desc;
   document.getElementById("formTitle").textContent = "Edit product";
@@ -118,6 +120,7 @@ function updateImagePreview(rawUrl) {
 function saveProduct() {
   const name = document.getElementById("fName").value.trim();
   const price = parseFloat(document.getElementById("fPrice").value);
+  const category = document.getElementById("fCategory").value.trim() || "Other";
   const rawImage = document.getElementById("fImage").value.trim();
   const image = resolveImageUrl(rawImage);
   const desc = document.getElementById("fDesc").value.trim();
@@ -129,9 +132,9 @@ function saveProduct() {
 
   if (editingId) {
     const p = draftProducts.find(prod => prod.id === editingId);
-    Object.assign(p, { name, price, image, desc });
+    Object.assign(p, { name, price, image, desc, category });
   } else {
-    draftProducts.push({ id: nextId(), name, price, image, desc });
+    draftProducts.push({ id: nextId(), name, price, image, desc, category });
   }
 
   saveDraftProducts(draftProducts);

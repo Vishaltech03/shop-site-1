@@ -45,5 +45,10 @@ Admin panel ab **Google Drive links support karta hai** — koi alag image hosti
 
 Agar image publish hone ke baad na dikhe, to sabse pehle check karein ki sharing setting "Anyone with the link" par hai ya nahi.
 
+## Search aur Category Filter
+Website mein ab top par ek search bar hai (naam/description se dhundta hai) aur category pills hain (jaise Jackets, Tees, Bottoms) — dono automatically `products.js` mein diye gaye `category` field se banti hain. Admin panel se product add/edit karte waqt "Category" field bhi bharein taaki filter sahi kaam kare.
+
+Mobile par jab bag mein koi item ho, to neeche ek sticky "View Bag" bar dikhta hai — Flipkart/Amazon jaisa.
+
 ## Aage koi bhi change karna
 Har baar file edit karne ke baad: **Save → Commit → Sync (Push)** — VS Code ke Source Control panel se.
